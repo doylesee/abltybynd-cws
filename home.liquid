@@ -1,0 +1,98 @@
+{% comment %}
+DO NOT EDIT THIS!
+UPDATE THE CORRESPONDING THEME INSTEAD!
+THEME CAN BE FOUND AT Career Sites > Theme Manager > Ability Beyond Theme
+
+ONCE THEME HAS BEEN UPDATE, RE-APPLY IT TO ALL APPLICABLE SITES
+{% endcomment %}
+
+{% page_required_header %}
+
+{{ 'careers-home' | pages_with_tag | assign_to: 'careers_home' }}
+
+<section class="padded-v-xlarge {{ careers_home[0].tag_list | remove: ',' }}">
+    {% if careers_home[0].tag_list contains 'layout-' %}
+        {% for page_tag in careers_home[0].tags %}
+            {% if page_tag contains 'layout-' %}
+                {% capture page_layout %}/{{ page_tag }}{% endcapture %}
+                {% break %}
+            {% endif %}
+        {% endfor %}
+
+        {{ careers_home[0] | assign_to: 'page_section_object'}}
+        {% include page_layout %}
+
+    {% else %}
+        <div class="row">
+            <div class="column medium-10 medium-offset-1 large-8 large-offset-2 end">{{ careers_home[0].content }}</div>
+        </div>
+
+    {% endif %}
+</section>
+
+<div class="hide-for-print">
+    <div class="row">
+        <div class="column">
+            <div class="padded-v-medium padded-h-xlarge branded-search branded-search--careers-home">
+                <div class="space-small"></div>
+                <div class="cs_item_type_jobsearch cs_cfix cs_jsearchform">
+                    <form id="search_form---" method="get" action="/search/jobs" class="search-form">
+                        <div class="row">
+                            <div class="columns large-9">
+                                <div class="row">
+                                    <div class="large-6 columns space-small">
+                                        <label for="cs_jobsearchforminput_keyword" class="show-for-sr">Keyword, Job Title, skills</label>
+                                        <input type="text" placeholder="Keyword, Job Title, skills" id="cs_jobsearchforminput_keyword" class="ui-autocomplete-input" autocomplete="off" name="q" value="{{ params['q'] | escape_html }}"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                    </div>
+                                    <div class="large-6 columns space-small">
+                                        <label for="search__location" class="show-for-sr">Enter a Location</label>
+                                        <input type="text" name="location" value="{{ params['location'] | escape_html }}" placeholder="Enter a Location" id="search__location" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns large-3 xlarge-2--">
+                                <div class="space-small">
+                                    <input type="submit" value="SEARCH JOBS" class="branded-button-1 full-width">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div><!--close .cs_item_type_jobsearch.cs_cfix cs_jsearchform-->
+            </div><!--close .branded-search-->
+        </div>
+    </div>
+</div>
+
+{% for i in (1..employer.pages.size) %}
+    {% capture page_layout %}{% endcapture %}
+    {% capture page_section_order_tag %}careers-home-section-{{ forloop.index }}{% endcapture %}
+
+    {{ page_section_order_tag | pages_with_tag | assign_to: 'page_sections' }}
+    {% if page_sections.size > 0 %}
+        <!--capture layout name-->
+        {% for page_tag in page_sections[0].tags %}
+            {% if page_tag contains 'layout-' %}
+                {% capture page_layout %}/{{ page_tag }}{% endcapture %}
+                {% break %}
+            {% endif %}
+        {% endfor %}
+
+        <!--include corresponding content block for the layout-->
+        <section id="{{ page_section_order_tag }}" class="page-section padded-v-xlarge{% if page_sections[0].tag_list contains 'layout-content-with-background' %}---{% endif %} {{ page_sections[0].tag_list | remove: ',' }}">
+            {% if page_layout != blank %}
+                {{ page_sections[0] | assign_to: 'page_section_object'}}
+                {% include page_layout %}
+            {% else %}
+                <div class="row">
+                    <div class="column">
+                        {{ page_sections[0].content }}
+                    </div>
+                </div>
+            {% endif %}
+        </section>
+    {% else %}
+        {% break %}
+    {% endif %}
+{% endfor %}
+
+{% page_required_footer %}

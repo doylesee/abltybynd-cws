@@ -1,0 +1,63 @@
+{% comment %}
+DO NOT EDIT THIS!
+UPDATE THE CORRESPONDING THEME INSTEAD!
+THEME CAN BE FOUND AT Career Sites > Theme Manager > Ability Beyond Theme
+
+ONCE THEME HAS BEEN UPDATE, RE-APPLY IT TO ALL APPLICABLE SITES
+{% endcomment %}
+
+{% page_required_header %}
+
+<section class="padded-v-xlarge {{ page.tag_list | remove: ',' }}">
+    {% if page.tag_list contains 'layout-' %}
+        {% for page_tag in page.tags %}
+            {% if page_tag contains 'layout-' %}
+                {% capture page_layout %}/{{ page_tag }}{% endcapture %}
+                {% break %}
+            {% endif %}
+        {% endfor %}
+
+        {{ page | assign_to: 'page_section_object'}}
+        {% include page_layout %}
+
+    {% else %}
+        <div class="row">
+            <div class="column medium-10 medium-offset-1 large-8 large-offset-2 end">{{ page.content }}</div>
+        </div>
+
+    {% endif %}
+</section>
+
+{% for i in (1..employer.pages.size) %}
+    {% capture page_layout %}{% endcapture %}
+    {% capture page_section_order_tag %}{{ page.permalink }}-section-{{ forloop.index }}{% endcapture %}
+
+    {{ page_section_order_tag | pages_with_tag | assign_to: 'page_sections' }}
+    {% if page_sections.size > 0 %}
+        <!--capture layout name-->
+        {% for page_tag in page_sections[0].tags %}
+            {% if page_tag contains 'layout-' %}
+                {% capture page_layout %}/{{ page_tag }}{% endcapture %}
+                {% break %}
+            {% endif %}
+        {% endfor %}
+
+        <!--include corresponding content block for the layout-->
+        <section id="{{ page_section_order_tag }}" class="page-section padded-v-xlarge{% if page_sections[0].tag_list contains 'layout-content-with-background' %}---{% endif %} {{ page_sections[0].tag_list | remove: ',' }}">
+            {% if page_layout != blank %}
+                {{ page_sections[0] | assign_to: 'page_section_object'}}
+                {% include page_layout %}
+            {% else %}
+                <div class="row">
+                    <div class="column">
+                        {{ page_sections[0].content }}
+                    </div>
+                </div>
+            {% endif %}
+        </section>
+    {% else %}
+        {% break %}
+    {% endif %}
+{% endfor %}
+
+{% page_required_footer %}

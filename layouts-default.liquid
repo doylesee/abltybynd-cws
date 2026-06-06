@@ -1,0 +1,445 @@
+{% comment %}
+DO NOT EDIT THIS!
+UPDATE THE CORRESPONDING THEME INSTEAD!
+THEME CAN BE FOUND AT Career Sites > Theme Manager > Ability Beyond Theme
+
+ONCE THEME HAS BEEN UPDATE, RE-APPLY IT TO ALL APPLICABLE SITES
+{% endcomment %}
+{% if page.permalink contains 'thank-you-tn' %}
+    {% redirect_permanent root_url %}
+{% endif %}
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+        
+        <link rel="shortcut icon" type="image/x-icon" href="/system/production/assets/371228/original/ability-beyond__icon.png">
+        <link rel="stylesheet" href="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css">
+
+        <link href='https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+        {% include '/_config__variables' %}
+
+        <!--START SEO META-->
+        <!--Capturing company name into a variable for use within code-->
+        {% capture company_name %}Ability Beyond{% endcapture %}
+
+        {% capture locale_permalink %}/{{ current_locale.locale }}{% endcapture %}
+
+        <!--Detecting if Careers Home page-->
+        {% capture current_locale_locale_down %}{{ current_locale.locale | downcase }}{% endcapture %}
+        {% if template.permalink == 'career_site_home_page' or template.permalink == current_locale_locale_down %}
+            {% capture is_home_page %}true{% endcapture %}
+        {% endif %}
+
+        <!--Detecting if Category page-->
+        {% if params['ns_category'] != blank %}
+            {% capture category_tag %}{{ params['ns_category'] | html_escape }}-jobs-content{% endcapture %}
+        {% else %}
+            {% capture current_locale_url %}{{ current_locale_locale_down }}-{% endcapture %}
+            {% capture category_tag %}{{ template.permalink | remove: current_locale_url | remove: 'search-' }}-content{% endcapture %}
+        {% endif %}
+        {{ category_tag | pages_with_tag | assign_to: 'category_pages' }}
+        {% if category_pages.size > 0 %}
+            {% capture is_category_page %}true{% endcapture %}
+        {% endif %}
+
+        <!--Detecting if Job Search Results page-->
+        {% if request.path contains '/search' and request.path contains '/jobs' and is_category_page != 'true' %}
+            {% capture is_job_search %}true{% endcapture %}
+        {% endif %}
+
+        {% if is_home_page == 'true' %}
+            <!--Setting meta content for Careers Home page-->
+            {% capture seo_to_index %}true{% endcapture %}
+            {% capture meta_title %}{{ company_name }} Careers{% endcapture %}
+            {% capture meta_description %}{% meta_description %}{% endcapture %}
+            {% capture meta_keywords %}{% meta_keywords %}{% endcapture %}
+
+        {% elsif is_category_page == 'true' %}
+            <!--Setting meta content for Category pages-->
+            {% capture seo_to_index %}true{% endcapture %}
+            {% capture meta_title %}{{ category_pages[0].title | html_safe }}{% endcapture %}
+            {% capture meta_description %}{% if category_pages[0].meta_description != blank %}{{ category_pages[0].meta_description }}{% else %}{% meta_description %}{% endif %}{% endcapture %}
+            {% capture meta_keywords %}{% if category_pages[0].meta_keywords != blank %}{{ category_pages[0].meta_keywords }}{% else %}{% meta_keywords %}{% endif %}{% endcapture %}
+
+        {% elsif is_job_search == 'true' %}
+            <!--Setting meta content for Facet pages-->
+            {% if selected_facets.size == 1 %}
+                {% capture seo_to_index %}true{% endcapture %}
+                {% capture meta_title %}{{ selected_facets[0]["label"] | html_escape }} Career{% if jobs.total_entries > 1 %}s{% endif %}{% endcapture %}
+                {% capture meta_description %}{% if jobs.total_entries > 0 %}Search {{ jobs.total_entries }} {% endif %}{{ selected_facets[0]["label"] | html_escape }} Career{% if jobs.total_entries > 1 %}s{% endif %} available at {{ company_name }}.{% endcapture %}
+                {% capture meta_keywords %}{% meta_keywords %}{% endcapture %}
+            <!--Setting meta content for Saved Jobs page-->
+            {% elsif params['saved_jobs'] == '1' %}
+                {% capture seo_to_index %}false{% endcapture %}
+                {% capture meta_title %}Saved Jobs{% endcapture %}
+                {% capture meta_description %}{% endcapture %}
+                {% capture meta_keywords %}{% endcapture %}
+            <!--Setting meta content for Job Search Results pages-->
+            {% else %}
+                {% capture seo_to_index %}false{% endcapture %}
+                {% capture meta_title %}Job Search Results{% endcapture %}
+                {% capture meta_description %}{% if jobs.total_entries > 0 %}Search {{ jobs.total_entries }} {% endif %}Career{% if jobs.total_entries > 1 %}s{% endif %} available at {{ company_name }}.{% endcapture %}
+                {% capture meta_keywords %}{% meta_keywords %}{% endcapture %}
+            {% endif %}
+
+        {% elsif job %}
+            <!--Setting meta content for Job Details pages-->
+            {% capture seo_to_index %}{{ job.active? }}{% endcapture %}
+            {% capture meta_title %}{{ job.title }} in {{ job.location.city }}, {{ job.location.state_prov }}, {{ job.location.country }}{% endcapture %}
+            {% capture meta_description %}{{ job.title }} in {{ job.location.city }}, {{ job.location.state_prov }}, {{ job.location.country }}{% endcapture %}
+            {% capture meta_keywords %}{% meta_keywords %}{% endcapture %}
+
+        {% elsif page %}
+            <!--Setting meta content for content pages-->
+            {% capture seo_to_index %}true{% endcapture %}
+            {% capture meta_title %}{{ page.title | html_safe }}{% endcapture %}
+            {% capture meta_description %}{% meta_description %}{% endcapture %}
+            {% capture meta_keywords %}{% meta_keywords %}{% endcapture %}
+
+        {% else %}
+            {% capture seo_to_index %}true{% endcapture %}
+            {% capture meta_title %}{% careersites_required_title %}{% endcapture %}
+            {% capture meta_description %}{% meta_description %}{% endcapture %}
+            {% capture meta_keywords %}{% meta_keywords %}{% endcapture %}
+
+        {% endif %}
+
+        {% if root_url contains 'internal' %}
+            <!--Setting meta content for non-indexable sites-->
+            {% capture seo_to_index %}false{% endcapture %}
+            {% capture meta_description %}{% endcapture %}
+            {% capture meta_keywords %}{% endcapture %}
+        {% endif %}
+
+        <title>{{ meta_title }}</title>
+
+        {% if seo_to_index == 'true' %}
+            {% if root_url contains 'preview' or root_url contains '-dev' %}
+                <meta name="robots" content="noindex, nofollow">
+            {% else %}
+                {% if job %}
+                    <meta name="robots" content="index, nofollow">
+                {% else %}
+                    <meta name="robots" content="index, follow">
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <meta name="robots" content="noindex, nofollow">
+        {% endif %}
+
+        {% capture current_url_with_current_locale_permalink %}{{ request_host_with_port }}{{ locale_permalink }}{% endcapture %}
+        {% capture current_url %}https://{{ request_host_with_port }}{{ request_path }}{% endcapture %}
+        
+        {% if available_locales.total_entries > 0 %}
+            {% capture canonical_url %}{{ current_url | replace: current_url_with_current_locale_permalink,request_host_with_port }}{% endcapture %}
+        {% else %}
+            {% capture canonical_url %}{{ current_url }}{% endcapture %}
+        {% endif %}
+        <link rel="canonical" href="{{ canonical_url }}" />
+
+        {% for locale in available_locales %}
+            {% capture current_url_with_locale_permalink %}{{ request_host_with_port }}/{{ locale.locale }}{% endcapture %}
+            {% capture locale_canonical_url %}{{ canonical_url | replace: request_host_with_port,current_url_with_locale_permalink }}{% endcapture %}
+            <link href="{{ locale_canonical_url }}" hreflang="{{ locale.locale }}" rel="alternate" type="text/html"/>
+        {% endfor %}
+
+        {% if meta_description != blank %}
+            <meta name="description" content="{{ meta_description }}">
+        {% endif %}
+        {% if meta_keywords != blank %}
+            <meta name="keywords" content="{{ meta_keywords }}">
+        {% endif %}
+        <!--END SEO META-->
+
+        <meta property="og:title" content="{{ meta_title }}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="/system/production/assets/371230/original/ability-beyond__social-share.jpg" />
+        <meta property="og:url" content="{{ root_url }}{{ request_fullpath | remove_first: '/' }}" />
+        {% if meta_description != blank %}<meta property="og:description" content="{{ meta_description }}" />{% endif %}
+        <meta property="og:locale" content="{% if current_locale.locale != blank %}{{ current_locale.locale }}{% else %}en{% endif %}" />
+        <meta property="og:site_name" content="{{ career_site.name }}" />
+  
+        {% careersites_required_head_tags %}
+        <script src="/system/production/assets/115086/original/talemetry.jobsearch.1.2.js" type="text/javascript"></script>
+
+        {% comment %}Logic for Prod only code{% endcomment %}
+        {% if cb_is_dev != 'true' %}
+            {% capture scripts_include_head %}/_{{ cb_site_type }}__scripts--head{% endcapture %}
+            {% include scripts_include_head %}
+        {% endif %}
+
+        <script src="https://cdn.gocanvas.io/embed/canvas-embed-candidate-chat-ui.js"></script>
+        {% if cb_is_dev == 'true' %}
+            {% capture organization_id %}c1c54830-445a-4c1e-afa7-b01edf1d9718{% endcapture %}
+        {% else %}
+            {% capture organization_id %}446b52ae-36bf-4fae-b5ba-ae0e0ffc198d{% endcapture %}
+        {% endif %}
+        <script>
+            var canvasEmbedConfig = {
+              "icon": {
+                  "color": "#0073d0",
+                  "iconUrl": "/system/production/assets/381418/original/ability-beyond__chatbot-icon--v3.jpg",
+                  "position": "bottom-right",
+                  "launcherIsVisible": true
+              },
+              "chat-ui": {
+                  "config": {
+                      "chatInstanceId": "{{ organization_id }}"
+                  },
+                  "style": {
+                      "mainColor": "#0073d0",
+                      "mainHoverColor": "#A1117A",
+                      "secondaryColor": "#231F20",
+                      "headerColor": "#0073d0",
+                      "logoUrl": "https://connect.talemetry.com/system/production/assets/372143/original/ability-beyond__chatbot-logo.jpg",
+                      "enableChatBotTab": false
+                  }
+                },
+            };
+            
+            var l = function() { canvasInitCandidateChatEmbedding(canvasEmbedConfig); };
+
+            if (window.attachEvent) {
+                window.attachEvent('onload', l);
+            } else {
+                window.addEventListener('load', l, false);
+            }
+        </script>
+    </head>
+    <body id="{{ template.permalink }}" class="scroll{% if request_fullpath contains '/search' %} has-search{% endif %}{% if params['savejob'] == '1' %} hide{% endif %}">
+        {% careersites_required_header %}
+
+        {% if cb_is_dev != 'true' %}
+            {% capture scripts_include_body %}/_{{ cb_site_type }}__scripts--body{% endcapture %}
+            {% include scripts_include_body %}
+        {% endif %}
+
+        <!-- <div class="preloader-wrapper">
+            <div class="preloader"></div>
+        </div> -->
+
+        <div class="hide">
+            {% capture returnurl %}return_url\":\"http:\\\\\\\\\\\\\\\\{{career_site.domain}}/\"{% endcapture %}
+            {% capture tn %}
+              {{ "Join our Talent Network" | link_to_talent_network: "talent-network-main", "talent-network-main" }}
+            {% endcapture %}
+            {{ tn | replace: 'return_url\":null', returnurl }}
+            
+            {% if cb_site_type == 'internal' %}
+                <a href="{{ cb_tn_url_pathways_program }}" id="pathways-program-tn-main">Pathways Program TN</a>
+                <div id="general-referral-main">{{ 'General Referral' | link_to_launcher, launcher_key: cb_general_referral_launcher_key }}</div>
+            {% endif %}
+        </div>
+
+        <div class="width-detector"></div>
+
+        <div class="saved-jobs-alert-wrapper full-height full-width hide-for-print" role="alert">
+            <div class="saved-jobs-alert background-white">
+                <div class="saved-jobs-alert__check color-white padded-medium" style="background: #000;">
+                    <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                </div>
+                <div class="saved-jobs-alert__message background-white padded-medium"></div>
+            </div><!--close .saved-jobs-alert-->
+        </div><!--close .saved-jobs-alert-wrapper-->
+
+        <div class="page-container fadeIn">
+
+            <a class="skip-main background-1 color-white hide-for-print" href="#main">Skip to main content</a>
+            
+            {% capture header_menu %}
+            <ul class="clearfix">
+                <li><a href="{{ root_url }}">Home</a></li>
+                <li><a href="/search/jobs">Searched Jobs</a></li>
+                <li><a href="/pages/saved-jobs" class="saved_jobs_link">Saved Jobs</a></li>
+                {% if cb_site_type == 'external' %}
+                    <li><a href="/pages/upcoming-events">Upcoming Events</a></li>
+                {% elsif site_typ == 'internal' %}
+                    <li><a href="/pages/pathways-program">Pathways Program</a></li>
+                {% endif %}
+                <li><a href="{{ 'en' | candidate_portal_url }}" target="_blank">{% if is_referral_site == 'true' %}Employee Portal{% else %}Candidate Portal{% endif %}</a></li>
+            </ul>
+            {% endcapture %}
+            <div class="top-wrapper relative-container">
+                <div class="header-anchor js"></div>
+                <div class="header-outer">
+                    <header>
+                        <div class="row row--full-width">
+                            <div class="row row--full-width">
+                                <div class="small-10 large-4 xlarge-3 columns header__logo">
+                                    <a href="https://abilitybeyond.org/"><img src="/system/production/assets/371229/original/ability-beyond__logo.png{% asset_seed %}" alt="{{ company_name }}" /></a>
+                                </div>
+                                <div class="hide-for-print small-2 large-8 columns header__menu-mobile text-right hide-for-xlarge">
+                                    <span class="header__menu-mobile-button">
+                                        <a href="javascript:void(0);" aria-expanded="false" class="color-1"><i class="fa fa-bars" aria-hidden="true"></i><span class="show-for-sr">Menu</span></a>
+                                    </span>
+                                </div>
+                                <div class="hide-for-print hide-for-xlarge columns header__menu large-text-right---" aria-hidden="true">
+                                    <nav class="header__menu-inner">{{ header_menu }}</nav>
+                                </div>
+                                <div class="hide-for-print show-for-xlarge xlarge-9 columns header__menu--large large-text-right" aria-hidden="true">
+                                    <nav class="header__menu-inner">{{ header_menu }}</nav>
+                                </div>
+                            </div>
+                        </div>
+                    </header><!--close header-->
+                </div><!--close .header-outer-->
+            </div><!--close .top-wrapper-->
+
+            <div id="main" tabindex="-1"></div>
+            <div class="template-content">
+                {% if request_fullpath contains '/search' %}
+                    <div class="hide-for-print">
+                        <div class="padded-v-medium padded-h-xlarge branded-search">
+                            <div class="space-small"></div>
+                            <div class="cs_item_type_jobsearch cs_cfix cs_jsearchform">
+                                <form id="search_form---" method="get" action="/search/jobs" class="search-form">
+                                    <div class="row">
+                                        <div class="columns large-9">
+                                            <div class="row">
+                                                <div class="large-6 columns space-small">
+                                                    <label for="cs_jobsearchforminput_keyword" class="show-for-sr">Keyword, Job Title, skills</label>
+                                                    <input type="text" placeholder="Keyword, Job Title, skills" id="cs_jobsearchforminput_keyword" class="ui-autocomplete-input" autocomplete="off" name="q" value="{{ params['q'] | escape_html }}"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                                </div>
+                                                <div class="large-6 columns space-small">
+                                                    <label for="search__location" class="show-for-sr">Enter a Location</label>
+                                                    <input type="text" name="location" value="{{ params['location'] | escape_html }}" placeholder="Enter a Location" id="search__location" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="columns large-3 xlarge-2--">
+                                            <div class="space-small">
+                                                <input type="submit" value="SEARCH JOBS" class="branded-button-1 full-width">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div><!--close .cs_item_type_jobsearch.cs_cfix cs_jsearchform-->
+                        </div><!--close .branded-search-->
+                    </div>
+                {% endif %}
+
+                {% if is_home_page == 'true' %}
+                    {{ 'careers-home' | pages_with_tag | assign_to: 'careers_home' }}
+                    {% capture banner_image_url %}{{ careers_home[0].images[0].url }}{% endcapture %}
+                    {% capture banner_heading %}{{ careers_home[0].title | html_safe }}{% endcapture %}
+
+                {% elsif is_category_page == 'true' %}
+                    {% if category_pages[0].images.size > 1 %}
+                        {% capture banner_image_url %}{{ category_pages[0].images[1].url }}{% endcapture %}
+                    {% else %}
+                        {% capture banner_image_url %}{{ category_pages[0].images[0].url }}{% endcapture %}
+                    {% endif %}
+                    {% capture banner_heading %}{{ category_pages[0].title | html_safe }}{% endcapture %}
+
+                {% elsif is_job_search == 'true' %}
+                    {{ 'search-jobs' | pages_with_tag |assign_to: 'search_jobs' }}
+                    {% capture banner_image_url %}{{ search_jobs[0].images[0].url }}{% endcapture %}
+
+                {% elsif page %}
+                    {% capture banner_image_url %}{{ page.images[0].url }}{% endcapture %}
+                    {% capture banner_heading %}{{ page.title | html_safe }}{% endcapture %}
+
+                {% endif %}
+
+                {% if banner_image_url != blank %}
+                    <section class="banner-section-outer{% if page %} {{ page.tag_list | remove: ',' | remove: 'background-image-' }}{% endif %}">
+                        <div class="banner-section{% if is_home_page != 'true' %} banner-section--top{% else %} banner-section--home{% endif %} relative-container layer-1" style="background-image: url('{{ banner_image_url }}');"></div>
+                        {% if banner_heading != blank %}
+                            <div class="banner-section__heading rounded-corners padded-v-small padded-h-medium">
+                                {% if is_home_page == 'true' %}
+                                    <h1 class="show-for-sr">{{ company_name }} Careers</h1>
+                                    <h2 class="heading-1 space-none">{{ banner_heading }}</h2>
+                                {% else %}
+                                    <h1 class="space-none">{{ banner_heading }}</h1>
+                                {% endif %}
+                            </div>
+                        {% endif %} 
+                    </section>
+                {% else %}
+                    {% if banner_heading != blank %}
+                        <div class="row">
+                            <div class="column medium-10 medium-offset-1 large-8 large-offset-2 end">
+                                <div class="space-xlarge"></div>
+                                <h1 class="space-none">{{ banner_heading }}</h1>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {% if is_referral_site == 'true' %}
+                    <div class="row">
+                        <div class="column">
+                            <div class="space-small"></div>
+                            Welcome, {{ user.first_name }} {{ user.last_name }}!
+                        </div>
+                    </div>
+                {% endif %}
+                
+                {{ template_content }}
+
+            </div><!--close .template-content-->
+
+            <footer>
+                {% if is_home_page == 'true' %}
+                        {% capture show_talent_network %}true{% endcapture %}
+                {% elsif request_fullpath contains '/search' or job %}
+                    {% if cb_site_type == 'external' %}
+                        {% capture show_talent_network %}true{% endcapture %}
+                    {% endif %}
+                {% endif %}
+                {% if show_talent_network == 'true' %}
+                    <div class="padded-v-xlarge background-gray{% if request_fullpath contains '/search' or job %} talent-network-section{% endif %}">
+                        <div class="relative-container layer-2">
+                            <div class="row">
+                                <div class="column text-center">
+                                    {% if cb_site_type == 'internal' %}
+                                        <p>Looking to advance your career with Ability Beyond?<br />Take the first step by completing a Talent Assessment today!</p>
+                                        <a href="javascript:void(0);" class="branded-button-1 talent-network-link">Take a Talent Assessment</a>
+                                    {% else %}
+                                        <p>Interested in working for Ability Beyond?<br />Take the first step by joining our Talent Network today!</p>
+                                        <a href="javascript:void(0);" class="branded-button-1 talent-network-link">Join our Talent Network</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="padded-v-large background-dark">
+                    <div class="row row--full-width">
+                        <div class="padded-h-large">
+                            <div class="row row--full-width">
+                                <div class="columns large-6">
+                                    &copy; {{ 'now' | date: "%Y" }} |  {{ company_name }}
+                                </div>
+                                <div class="columns large-6 small-text-left large-text-right footer__social-media">
+                                    <div class="space-small hide-for-large"></div>
+                                    <a href="https://www.youtube.com/abeyonddisability " target="_blank"><i class="fa fa-youtube-play"><span class="show-for-sr">youtube</span></i></a>
+                                    <a href="https://www.linkedin.com/company/abilitybeyonddisability/" target="_blank"><i class="fa fa-linkedin"><span class="show-for-sr">linkedin</span></i></a>
+                                    <a href="https://www.instagram.com/abilitybeyond/?hl=en" target="_blank"><i class="fa fa-instagram"><span class="show-for-sr">linkedin</span></i></a>
+                                    <a href="https://www.facebook.com/AbilityBeyond/" target="_blank"><i class="fa fa-facebook"><span class="show-for-sr">facebook</span></i></a>
+                                    <a href="https://twitter.com/abilitybeyond" target="_blank"><i class="fa fa-twitter"><span class="show-for-sr">twitter</span></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer><!--close footer-->
+
+        </div><!--close .page-container-->
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js"></script>
+        {% careersites_required_footer %}
+        <script>$(document).foundation();</script>
+
+        {% if cb_is_dev != 'true' %}
+            {% capture scripts_include_footer %}/_{{ cb_site_type }}__scripts--footer{% endcapture %}
+            {% include scripts_include_footer %}
+        {% endif %}
+    </body>
+</html>
