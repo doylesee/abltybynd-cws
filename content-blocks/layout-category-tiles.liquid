@@ -1,0 +1,66 @@
+<div class="space-small"></div>
+
+<div class="row row--narrow">
+	<div class="column">
+		{{ page_section_object.content }}
+	</div>
+</div>
+
+<div class="row row--narrow same-height-parent-js">
+	{% for i in (1..employer.pages.size) %}
+		{% capture category_order_tag %}job-category-{{ forloop.index }}{% endcapture %}
+		{{ category_order_tag | pages_with_tag | assign_to: 'category_order' }}
+
+		{% if category_order.size > 0 %}
+			{% capture category_content_formatted %}{{ category_order[0].content | replace: '<p>','---' | replace: '</p>','---' }}{% endcapture %}
+            {% assign category_content_array = category_content_formatted | split: '---' | assign_to: 'category_attr' %}
+            {% assign category_permalink = category_attr[1] | strip %}
+
+            {% for tag in category_order[0].tags %}
+                {% if tag contains '-jobs-content' %}
+                    {% capture category_permalink_w_content_tag %}{{ category_permalink }}{% if category_permalink contains '?' %}&ns_category={{ tag | remove: '-jobs-content' }}{% endif %}{% endcapture %}
+                    {% break %}
+                {% endif %}
+            {% endfor %}
+
+			<div class="columns medium-6 large-4 end category-item-outer space-small">
+				<a href="{{ category_permalink_w_content_tag }}" class="category-item">
+					<div class="category-item__image same-height-item-js rounded-corners space-small">
+						<img src="{{ category_order[0].images[0].url }}" alt="" />
+					</div>
+					<div class="category-item__copy text-center">
+						<h2 class="heading-3 space-none">{{ category_order[0].title | html_safe }}</h2>
+						<p class="color-gray small-text space-none">(<span class="category__total-jobs--{{ forloop.index }}">0</span> available jobs)</p>
+
+						{% capture category_permalink_json %}{{ category_permalink | replace: '/jobs','/jobs.json' | replace: '&amp;','&' }}{% if category_permalink contains '?' %}&{% else %}?{% endif %}callback=?{% endcapture %}
+                        <script>
+                            $.getJSON('{{ category_permalink_json }}', function(data) {
+                                var job_obj = data;
+                                if (job_obj.total_entries > 0) {
+                                    $('.category__total-jobs--{{ forloop.index }}').text(job_obj.total_entries);
+                                }
+                            });
+                        </script>
+					</div>
+				</a>
+			</div>
+		{% else %}
+			{% break %}
+		{% endif %}
+	{% endfor %}
+
+	<div class="columns medium-6 large-4 end category-item-outer space-small">
+		<span class="category-item">
+			<div class="category-item__image same-height-item-js rounded-corners space-small">
+				<div class="category-item__image-inner padded-h-xsmall padded-v-large text-center full-height">
+					<h2 class="heading-3 space-medium">View All Open Positions</h2>
+					<a href="/search/jobs" class="branded-button-1">SEARCH JOBS</a>
+				</div>
+			</div>
+			<div class="category-item__copy text-center">
+				<h2 class="heading-3 space-none">&nbsp</h2>
+				<p class="small-text space-none">&nbsp;</p>
+			</div>
+		</span>
+	</div>
+</div>

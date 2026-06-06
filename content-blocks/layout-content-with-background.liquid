@@ -1,0 +1,33 @@
+<div class="padded-v-large">&nbsp;</div>
+<div class="background-is-image content-with-background-inner relative-container layer-1"{% if page_section_object.images.size > 0 %} style="background-image: url('{{ page_section_object.images[0].url }}');"{% endif %}>
+    <div class="row row--full-width">
+        <div class="row row--full-width">
+            <div class="column medium-6 large-4 xlarge-3 end">
+                {% comment %}
+                Removed because customer did not want this to overlay the image, even though their corporate site does the same
+                <div class="{% if page_section_object.content_ != blank %}background-gradient {% endif %}background-dark padded-large">
+                    <div class="padded-v-xlarge"></div>
+                    Removed because customer did not want this to overlay the image, even though their corporate site does the same
+                    {{ page_section_object.content }}
+                </div>
+                {% endcomment %}
+                <div class="padded-v-xlarge"></div>
+                <div class="padded-v-xlarge">
+                    <div class="padded-v-xlarge show-for-medium">
+                        <div class="padded-v-large show-for-large"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="background-white">
+    <div class="row">
+        <div class="column large-10 large-offset-1 end">
+            <div class="padded-v-small text-center">
+                <div class="space-small"></div>
+                {{ page_section_object.content }}
+            </div>
+        </div>
+    </div>
+</div>

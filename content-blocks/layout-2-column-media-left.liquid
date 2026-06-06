@@ -1,0 +1,28 @@
+{% if page_section_object.content contains '<div class="intro">' %}
+	{% capture page_content_formatted %}{{ page_section_object.content | replace: '<div class="intro">','---<div class="intro">' | replace: '</div>','</div>---' }}{% endcapture %}
+	{% assign page_content_array = page_content_formatted | split: '---' | assign_to: 'page_elements' %}
+	<div class="row">
+		<div class="column medium-10 medium-offset-1 large-8 large-offset-2 end">
+			{% for page_element in page_elements %}
+				{% if page_element contains '<div class="intro">' %}
+					{{ page_element }}
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+{% endif %}
+
+<div class="row">
+	<div class="columns large-6 space-small">
+		{% if page_section_object.videos.size > 0 %}
+			<div class="responsive-embed rounded-corners">
+				{{ page_section_object.videos[0].code | replace: 'http://','https://' }}
+			</div>
+		{% else %}
+			<img src="{{ page_section_object.images[0].url }}" alt="" class="full-width rounded-corners" />
+		{% endif %}
+	</div>
+	<div class="columns large-6">
+		{{ page_section_object.content | replace: '<div class="intro">','<div class="intro hide">' }}
+	</div>
+</div>

@@ -1,0 +1,53 @@
+{% capture page_sections_content %}{{ page_section_object.content }}{% endcapture %}
+
+{% capture page_content_formatted %}{{ page_sections_content | replace: '<div class="item">','---<div class="item">' | replace: '</div>','</div>---' }}{% endcapture %}
+{% assign page_content_array = page_content_formatted | split: '---' | assign_to: 'page_elements' %}
+
+{% capture column_contents %}{% endcapture %}
+
+{{ 0 | assign_to: 'item_index' }}
+{% for page_element in page_elements %}
+	{% if page_element contains '<div class="item">' %}
+		{% capture column_contents %}
+		{{ column_contents }}
+		<div class="columns">
+			{% capture index_modulo %}{{ item_index | modulo: 2 }}{% endcapture %}
+			{% if index_modulo == '0' %}
+				<div class="row row--narrow space-small">
+					<div class="columns large-6 large-push-6 space-small">
+						<img src="{{ page_sections[0].images[item_index].url }}" alt="" class="full-width rounded-corners" />
+					</div>
+					<div class="columns large-6 large-pull-6">
+						{{ page_element }}
+					</div>
+				</div>
+			{% else %}
+				<div class="row row--narrow">
+					<div class="columns large-6 space-small">
+						<img src="{{ page_sections[0].images[item_index].url }}" alt="" class="full-width rounded-corners" />
+					</div>
+					<div class="columns large-6">
+						{{ page_element }}
+					</div>
+				</div>
+			{% endif %}
+		</div>
+		{% endcapture %}
+		{{ item_index | plus: 1 | assign_to: 'item_index' }}
+
+	{% elsif page_element != '' %}
+		{% capture column_contents %}
+		{{ column_contents }}
+		<div class="column">
+			{{ page_element }}
+			<div class="space-large"></div>
+		</div>
+		{% endcapture %}
+
+	{% endif %}
+{% endfor %}
+
+<div class="space-small"></div>
+<div class="row row--narrow same-height-parent-js">
+	{{ column_contents }}
+</div>

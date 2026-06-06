@@ -1,0 +1,30 @@
+{% if page_section_object.content contains '<div class="intro">' %}
+	{% capture page_content_formatted %}{{ page_section_object.content | replace: '<div class="intro">','---<div class="intro">' | replace: '</div>','</div>---' }}{% endcapture %}
+	{% assign page_content_array = page_content_formatted | split: '---' | assign_to: 'page_elements' %}
+	<div class="row">
+		<div class="column medium-10 medium-offset-1 large-8 large-offset-2 end">
+			{% for page_element in page_elements %}
+				{% if page_element contains '<div class="intro">' %}
+					{{ page_element }}
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+{% endif %}
+
+<div class="row">
+	<div class="column">
+		<div class="column-copy column-copy--left">
+			<div class="column-copy__box padded-large{% unless page_section_object.tag_list contains 'background-gray' %} background-gray{% endunless %}">
+				{{ page_section_object.content | replace: '<div class="intro">','<div class="intro hide">' }}
+			</div>
+		</div>
+		<div class="column-media column-media--right">
+			<div class="column-media__hexagon background-dark" style="background-image: url('{{ page_section_object.images[0].url }}');">
+				{% if page_section_object.images[0].title != page_section_object.images[0].file_name %}
+					<div class="column-media__hexagon-copy{% if page_section_object.images[0].title.size < 30 %} column-media__hexagon-copy--large{% endif %} text-center">{{ page_section_object.images[0].title | replace: '&lt;br&gt;','<br />' }}</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
