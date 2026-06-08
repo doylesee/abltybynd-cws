@@ -1,8 +1,8 @@
 ## Project Overview
 <pre>
-<b>Project:</b>   Ability Beyond Careers
-<b>Role:</b>      Lead UI Developer
-<b>Tools:</b>     Figma, Liquid, HTML5, CSS3, JS/jQuery, Foundation
+<b>Project:</b>  Ability Beyond Careers
+<b>Role:</b>     Lead UI Developer
+<b>Tools:</b>    Figma, Liquid, HTML5, CSS3, JS/jQuery, Foundation
 </pre>
 &nbsp;<strong><a href="https://careers.abilitybeyond.org/">View project</a></strong>
 
