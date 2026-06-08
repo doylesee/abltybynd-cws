@@ -4,9 +4,9 @@
 <b>Role:</b>     Lead UI Developer
 <b>Tools:</b>    Figma, Liquid, HTML5, CSS3, JS/jQuery, Foundation
 </pre>
-&nbsp;<strong><a href="https://careers.abilitybeyond.org/">View project</a></strong>
+&nbsp;<strong><a href="https://careers.abilitybeyond.org/" rel="noopener noreferrer">View project</a></strong>
 
-<p><a href="https://careers.abilitybeyond.org/"><img src="https://doylesee.github.io/abltybynd-cws/thumbnail.jpg" /></a></p>
+<p><a href="https://careers.abilitybeyond.org/" rel="noopener noreferrer"><img src="https://doylesee.github.io/abltybynd-cws/thumbnail.jpg" /></a></p>
 <br />
 
 ## The Challenge
@@ -38,4 +38,4 @@ Successfully engineered a fast-loading, mobile-first responsive infrastructure m
 **High Client Satisfaction**<br />
 Shipped an enterprise product that delighted stakeholders due to its extreme visual accuracy and newfound administrative freedom.
 
-<br /><strong><a href="https://careers.abilitybeyond.org/">View project</a></strong>
+<br /><strong><a href="https://careers.abilitybeyond.org/" rel="noopener noreferrer">View project</a></strong>
