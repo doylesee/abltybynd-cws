@@ -26,16 +26,16 @@ To solidify long-term project success, I wrote a comprehensive Content Managemen
 <br />
 
 ## Results & Impact
-**Pixel-Perfect Execution**<br />
+✅ **Pixel-Perfect Execution**<br />
 Delivered a high-performance web platform that flawlessly retained the bold typography, complex vector shapes, and gradient aesthetics of the original Figma mockups.
 
-**Easy Content Updates for the Client**<br />
+✅ **Easy Content Updates for the Client**<br />
 Revolutionized the client's internal management workflow by replacing an inflexible legacy platform with a flexible, tag-driven component builder.
 
-**Built to Modern Web Standards**<br />
+✅ **Built to Modern Web Standards**<br />
 Successfully engineered a fast-loading, mobile-first responsive infrastructure meeting cross-browser compatibility and strict web accessibility compliance.
 
-**High Client Satisfaction**<br />
+✅ **High Client Satisfaction**<br />
 Shipped an enterprise product that delighted stakeholders due to its extreme visual accuracy and newfound administrative freedom.
 
 <br /><strong><a href="https://careers.abilitybeyond.org/" rel="noopener noreferrer">View project</a></strong>
