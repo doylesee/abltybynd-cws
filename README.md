@@ -4,9 +4,12 @@
 <b>Role:</b>     Lead UI Developer
 <b>Tools:</b>    Figma, Liquid, HTML5, CSS3, JS/jQuery, Foundation
 </pre>
-&nbsp;<strong><a href="https://careers.abilitybeyond.org/" rel="noopener noreferrer">View project</a></strong>
 
-<p><a href="https://careers.abilitybeyond.org/" rel="noopener noreferrer"><img src="https://doylesee.github.io/abltybynd-cws/thumbnail.jpg" /></a></p>
+### Table of Contents
+* [The Challenge](#the-challenge)
+* [My Approach & Implementation](#my-approach--implementation)
+* [Results & Impact](#results--impact)
+* [View Project](https://careers.abilitybeyond.org/)
 <br />
 
 ## The Challenge
