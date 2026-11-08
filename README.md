@@ -12,6 +12,10 @@
 * [View Project](https://careers.abilitybeyond.org/)
 <br />
 
+<a href="https://careers.abilitybeyond.org">
+  <img src="screenshot.jpg" alt="" width="100%">
+</a>
+
 ## The Challenge
 Ability Beyond provided a set of beautiful Figma designs for their new recruitment portal. The designs were modern, content-rich, and visually striking, featuring large bold layout typography, intricate multi-colored gradients, complex geometric shapes, and a heavy volume of creative media.
 
