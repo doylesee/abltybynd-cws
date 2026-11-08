@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+{% unless root_url contains 'ttcportals.com' or root_url contains 'internal' or root_url contains 'agency' %}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>{{ request_protocal }}{{ request_host_with_port }}</loc>
+        <lastmod>2023-05-01</lastmod>
+    </url>
+ 
+    {{ 'q=&per_page=1&sort_by=updated_at,desc&search_type=talemetry' | job_query | assign_to: 'latest_job' }}
+    {% for job in latest_job %}
+        {% capture job_search_last_mod %}{{ job.updated_at  | date: "%Y-%m-%d" }}{% endcapture %}
+    {% endfor %}
+     <url>
+        <loc>{{ request_protocal }}{{ request_host_with_port }}/search/jobs</loc>
+        <lastmod>{{ job_search_last_mod }}</lastmod>
+    </url>
+
+    {% assign facet_setup = "location_country_seo;location_state_seo;location_city_seo;cfm1_seo;cfm2_seo;cfm3_seo;cfm4_seo;cfm5_seo;cfm6_seo;cfm7_seo;cfm8_seo;cfm9_seo;cfm10_seo;cfm11_seo;cfm12_seo;cfm13_seo;cfm14_seo;cfm15_seo;cfm16_seo;cfm17_seo;cfm18_seo;cfm19_seo;cfm20_seo;cfm21_seo;cfm22_seo;cfm23_seo;cfm24_seo;" | split: ';' | assign_to: 'facet_setup_split' %}
+    {% comment %}Remove CFMs that don't have to be indexed by search engines!{% endcomment %}
+    
+    {% for facet_attrs in facet_setup_split %}
+        {{ facet_attrs | split: ', ' | assign_to: 'facet_attr' }}
+        {% assign facet_field = facet_attr[0] %}
+        {% assign facet_order = facet_attr[1] %}
+
+        {{ facet_field | facet_single: 999999, 'asc' | assign_to: 'fa' }}
+        {% assign facets = fa %}
+
+        {% assign facet_results = facets[facet_field] %}
+
+        {{ facet_field | selected_facets_by_name | assign_to: 'fas' }}
+        {% assign facet_select = fas %}
+
+        {% capture facet_mapping %}{{ facet_field | remove: '_seo' | replace: 'cfm','cfml' }}{% endcapture %}
+
+        {% for facet in facet_results %}
+            {% if facet['permalink'] != "" %}
+                <url>
+                    <loc>{{ request_protocal }}{{ request_host_with_port }}{{ facet['query'] | remove: '?format=xml' | strip | replace: '//','/' | remove: '.xml?paths=seo%2Fsitemap' | remove: '.xml' }}</loc>
+                    {% capture facet_job_query %}{{ facet_mapping }}={{ facet["label"] }}&search_type=talemetry&per_page=1&sort_by=updated_at,desc{% endcapture %}
+                    {{ facet_job_query | job_query | assign_to: 'facetjobresults' }}
+                    {% for job in facetjobresults %}
+                        <lastmod>{{ job.updated_at | date: "%Y-%m-%d" }}</lastmod>
+                        {% break %}
+                    {% endfor %}
+                </url>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+ 
+    {{ 'q=&per_page=10000&search_type=talemetry' | job_query | assign_to: 'all_jobs' }}
+    {% for job in all_jobs %}
+        <url>
+            <loc>{{ request_protocal }}{{ request_host_with_port }}{{ job.url }}</loc>
+            <lastmod>{{ job.updated_at | date: "%Y-%m-%d" }}</lastmod>
+        </url>
+    {% endfor %}
+
+</urlset>
+{% endunless %}
